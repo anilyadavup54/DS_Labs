@@ -1,0 +1,560 @@
+                        #1.ARRAY PROGRAM
+Write a program to traverse, search (binary and linear), insert, delete, sorting (bubble sort, Insertion, Selection, Merge and Quick) and reverse using array.
+#include <stdio.h>
+// Function declarations
+// Function to traverse array
+void traverseArray(int array[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", array[i]);    }
+    printf("\n");}
+// Function to search item in array using binary search
+int binarySearch(int array[], int left, int right, int item) {
+    if (right >= left) {
+        int mid = left + (right - left) / 2;
+        if (array[mid] == item) {
+            return mid;        }
+        if (array[mid] > item) {
+            return binarySearch(array, left, mid - 1, item);        }
+        return binarySearch(array, mid + 1, right, item);    }
+    return -1;}
+// Function to insert item in array
+void insertItem(int array[], int *size, int item) {
+    array[*size] = item;
+    (*size)++;}
+// Function to delete item in array
+void deleteItem(int array[], int *size, int item) {
+    int index = binarySearch(array,0,10,item);
+    if (index != -1) {
+        for (int i = index; i < *size - 1; i++) { 
+                       array[i] = array[i + 1];
+                             }     
+                                (*size)--;  
+                                }}
+// Function to sort array using bubble sort
+void bubbleSort(int array[], int size) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                int temp = array[j];         
+               array[j] = array[j + 1];
+                array[j + 1] = temp;            }        }    }}
+// Function to sort array using insertion sort
+void insertionSort(int array[], int size) {
+    for (int i = 1; i < size; i++) {
+        int key = array[i];
+        int j = i - 1;
+       while (j >= 0 && array[j] > key) {
+            array[j + 1] = array[j];
+            j = j - 1;        }
+        array[j + 1] = key;  }}
+// Function to sort array using selection sort
+void selectionSort(int array[], int size) {
+    for (int i = 0; i < size - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < size; j++) {
+            if (array[j] < array[minIndex]) {
+                minIndex = j;            }        }
+        int temp = array[minIndex];
+        array[minIndex] = array[i];
+        array[i] = temp;    }}
+void print(int array[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", array[i]);    }
+    printf("\n");
+}
+int main(){
+  int array[]={1,2,3,4,5,6,7,8,9,10}; 
+  int array1[]={11,2,3,4,55,6,17,8,79,10}; 
+  int size=10;
+  int item=7;  int left=0;  int right=size-1;  
+  traverseArray(array,size);
+  int printno2=binarySearch(array,left,right,item);  
+  printf("\n%d\n",printno2);
+  insertItem(array1,&size,1);  
+  print(array1,size);
+  deleteItem(array,&size,item);  
+  print(array,size-1);
+  bubbleSort(array1,size);  
+  printf("bubble sort\n");  
+  print(array1,size); 
+ printf("insertion sort\n");  
+ insertionSort(array1,size);  
+ print(array1,size);
+  printf("selection sort\n");  
+  selectionSort(array1,size);  
+  print(array1,size);
+  return 0;
+}
+
+                        #SINGLY LINKED LIST PROGRAM
+Write a program to create linked list, insertion operation (insertion at beginning, insertion on last, insertion at particular position), deletion Operation (deletion at beginning, deletion on last, deletion at particular position), and display operation in a single linked list.
+
+
+
+                        #DOUBLY LINKED LIST PROGRAM
+Write a program to create linked list, insertion operation (insertion at beginning, insertion on last, insertion at particular position), deletion Operation (deletion at beginning, deletion on last, deletion at particular position), and display operation in a doubly linked list.
+#include <stdio.h>
+#include <stdlib.h>
+//Node structure
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+//Function to get new node
+struct Node* getNewNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+//Insert at beguning
+void insertAtBeginning(struct Node** head, int data) {
+    struct Node* newNode = getNewNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+        }
+        else {
+            newNode->next = *head;
+            (*head)->prev = newNode;
+            *head = newNode;
+            }
+}
+//Function to insert a new node at a specific position in the linked list
+void insertAtPosition(struct Node** head, int pos, int data) {
+    if(pos == 0) {
+        insertAtBeginning(head, data);
+        return;
+    }
+    struct Node* temp = *head;
+    struct Node* newNode = getNewNode(data);
+    int i;
+    for(i = 0; i < pos - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+    if(temp == NULL) {
+        printf("Position out of range\n");
+        return;
+    }
+    newNode->next = temp->next;
+    newNode->prev = temp;
+    temp->next = newNode;
+    if(newNode->next != NULL) {
+        newNode->next->prev = newNode;
+    }
+}
+//Function to delete a node at a specific position in the linked list
+void deleteAtPosition(struct Node** head, int pos) {
+    if(*head == NULL) {
+        printf("Linked list is empty\n");
+        return;
+    }
+    struct Node* temp = *head;
+    for(int i = 0; i < pos && temp != NULL; i++) {
+        temp = temp->next;
+    }
+    if(temp == NULL) {
+        printf("Position out of range\n");
+        return;
+    }
+    if(temp->prev != NULL) {
+        temp->prev->next = temp->next;
+    }
+    if(temp->next != NULL) {
+        temp->next->prev = temp->prev;
+    }
+    free(temp);
+}
+//Function to display the linked list
+void display(struct Node* head) {
+    struct Node* temp = head;
+    printf("Linked list: ");
+    while(temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+int main(){
+    //Create an empty linked list
+    struct Node* head = NULL;
+    //Insert nodes into the linked list
+    insertAtBeginning(&head,50);
+    insertAtBeginning(&head,40);
+    insertAtBeginning(&head,30);
+    insertAtBeginning(&head,20);
+    insertAtBeginning(&head,10);
+    display(head);
+    insertAtPosition(&head, 3,54);
+    display(head);
+    //Delete a node at position 1 from the linked list
+    deleteAtPosition(&head,4);
+    display(head);
+    return 0;
+}
+
+
+
+                        #SINGLY CIRCULAR LINKED LIST PROGRAM
+Write a program to create, all insertion operation all deletion operation and display operation in Singly Circular Linked List.
+#include<stdio.h>
+#include<stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+void create(struct Node **start_ref) {
+    int i,n;
+    struct Node *temp, *last;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    if (n == 0) {
+        *start_ref = NULL;
+        return;
+    }
+    temp = (struct Node *)malloc(sizeof(struct Node));
+    printf("Enter the %dth element: ", 1);
+    scanf("%d", &temp->data);
+    temp->next = temp; //last node points to first node in circular linked list
+    last = temp;
+    *start_ref = temp; //first node
+    for (i = 2; i <= n; i++) {
+        temp = (struct Node *)malloc(sizeof(struct Node));
+        printf("Enter the %dth element: ", i);
+        scanf("%d", &temp->data);
+        temp->next = last->next;
+        last->next = temp;
+        last = temp;
+    }
+}
+void insert(struct Node **start_ref, int pos, int data) {
+    struct Node *temp, *new_node;
+    int i;
+
+    if (*start_ref == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    if (pos == 1) {
+        new_node = (struct Node *)malloc(sizeof(struct Node));
+        new_node->data = data;
+        new_node->next = *start_ref;
+        *start_ref = new_node;
+    } else {
+        temp = *start_ref;
+        for (i = 1; i < pos - 1; i++) {
+            temp = temp->next;
+        }
+        new_node = (struct Node *)malloc(sizeof(struct Node));
+        new_node->data = data;
+        new_node->next = temp->next;
+        temp->next = new_node;
+    }
+}
+void delete(struct Node **start_ref, int pos) {
+    struct Node *temp, *prev;
+    int i;
+
+    if (*start_ref == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    if (pos == 1) {
+        temp = *start_ref;
+        *start_ref = temp->next;
+        free(temp);
+    } else {
+        temp = *start_ref;
+        for (i = 1; i < pos - 1; i++) {
+            temp = temp->next;
+        }
+        prev = temp;
+        temp = temp->next;
+        prev->next = temp->next;
+        free(temp);
+    }
+}
+void display(struct Node *start) {
+    struct Node *temp;
+
+    if (start == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    temp = start;
+    printf("The elements in the circular linked list are: \n");
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != start);
+
+    printf("\n");
+}
+int main() {
+    struct Node *start = NULL;
+
+    create(&start);
+    display(start);
+
+    insert(&start, 2, 15);
+    display(start);
+
+    delete(&start, 3);
+    display(start);
+
+    return 0;
+}
+
+
+                        #DOUBLY CIRCULAR LINKED LIST PROGRAM
+Write a program to create, all insertion operation all deletion operation and display operation in doubly Circular Linked List.
+#include<stdio.h>
+#include<stdlib.h>
+struct Node{
+    int data;
+    struct Node* next;
+};
+void create(struct Node** start){
+    int n, i, value;
+    struct Node* temp, * last;
+
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+
+    if(n == 0){
+        *start = NULL;
+        return;
+    }
+
+    *start = (struct Node*)malloc(sizeof(struct Node));
+    printf("Enter value of node 1: ");
+    scanf("%d", &value);
+    (*start)->data = value;
+    last = *start;
+    temp = *start;
+
+    for(i = 2; i <= n; i++){
+        temp = (struct Node*)malloc(sizeof(struct Node));
+        printf("Enter value of node %d: ", i);
+        scanf("%d", &value);
+        temp->data = value;
+        last->next = temp;
+        last = temp;
+    }
+
+    last->next = *start; // Make it circular
+}
+void allInsertion(struct Node** start){
+    int n, i, value;
+    struct Node* temp;
+
+    printf("Enter number of nodes to be inserted: ");
+    scanf("%d", &n);
+
+    if(n == 0)
+        return;
+
+    for(i = 1; i <= n; i++){
+        temp = (struct Node*)malloc(sizeof(struct Node));
+        printf("Enter value of node %d: ", i);
+        scanf("%d", &value);
+        temp->data = value;
+
+        if(*start == NULL){
+            *start = temp;
+            temp->next = *start;
+        } else {
+            temp->next = (*start)->next;
+            (*start)->next = temp;
+        }
+    }
+}
+void allDeletion(struct Node** start){
+    struct Node* temp = *start;
+    struct Node* next;
+
+    if(*start == NULL){
+        printf("Stack is empty\n");
+        return;
+    }
+
+    if((*start)->next == *start){
+        free(*start);
+        *start = NULL;
+        return;
+    }
+
+    while(temp->next != *start){
+        next = temp->next;
+        free(temp);
+        temp = next;
+    }
+
+    free(temp);
+    *start = NULL;
+}
+void display(struct Node* start){
+    struct Node* temp = start;
+
+    if(start == NULL){
+        printf("Stack is empty\n");
+        return;
+    }
+
+    printf("Nodes of the circular linked list: \n");
+    do{
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while(temp != start);
+    printf("\n");
+}
+int main(){
+    struct Node* start = NULL;
+    int choice;
+
+    while(1){
+        printf("\n1. Create Circular linked list\n");
+        printf("2. Insert node into circular linked list\n");
+        printf("3. Delete all nodes from circular linked list\n");
+        printf("4. Display circular linked list\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice){
+            case 1: create(&start); break;
+            case 2: allInsertion(&start); break;
+            case 3: allDeletion(&start); break;
+            case 4: display(start); break;
+            case 5: exit(0);
+            default: printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
+
+
+                        #STACK PROGRAM
+Write a program to perform push , pop , isfull and  isempty  operation in stack using array and linked list both.
+#include<stdio.h>
+#define MAX_SIZE 5
+int stack[MAX_SIZE];
+int top = -1;
+int stack[MAX_SIZE];
+int isEmpty(){
+    if(top == -1)
+        return 1;
+    else
+        return 0;
+}
+int isFull(){
+    if(top == MAX_SIZE - 1)
+        return 1;
+    else
+        return 0;
+}
+void push(int data){
+    if(isFull()){
+        printf("Stack is Full\n");
+        return;
+    }
+    stack[++top] = data;
+    printf("Pushed element : %d\n", data);
+}
+int pop(){
+    if(isEmpty()){
+        printf("Stack is Empty\n");
+        return -1;
+    }
+    return stack[top--];
+}
+int main(){
+    push(10);
+    push(20);
+    push(30);
+    push(40);
+    push(50); // Full
+
+    printf("Popped element : %d\n", pop());
+    printf("Popped element : %d\n", pop());
+    printf("Popped element : %d\n", pop());
+
+    push(60); // Now not full
+    push(70);
+    push(80);
+    push(90); // Full again
+
+    printf("Top element : %d\n", stack[top]);
+    return 0;
+}
+
+
+
+                         #QUEUE PROGRAM
+Write a program to perform enqueue , dequeue, isfull ,isempty operation in queue using array and linked list both.
+#include<stdio.h>
+
+#define SIZE 5
+int queue[SIZE];
+int front = -1;
+int rear = -1;
+
+int isFull() {
+    if((rear + 1) % SIZE == front) {
+        return 1;
+    }
+    return 0;
+}
+
+int isEmpty() {
+    if(front == -1 || front == rear) {
+        return 1;
+    }
+    return 0;
+}
+void enqueue(int data) {
+    if(isFull()) {
+        printf("Queue is full.\n");
+    } else {
+        if(front == -1) {
+            front = 0;
+        }
+        rear = (rear + 1) % SIZE;
+        queue[rear] = data;
+        printf("Enqueued %d.\n", data);
+    }
+}
+
+void dequeue() {
+    if(isEmpty()) {
+        printf("Queue is empty.\n");
+    } else {
+        if(front == rear) {
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % SIZE;
+        }
+        printf("Dequeued element.\n");
+    }
+}
+
+int main() {
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+    enqueue(40);
+    isEmpty();
+    enqueue(50);
+    dequeue();
+    dequeue();
+    enqueue(60);
+    enqueue(70);
+    return 0;
+}
